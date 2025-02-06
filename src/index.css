@@ -72,7 +72,7 @@ button {
 }
 
 .list {
-  background-image: url(img/paper-bg.jpg);
+  background-image: url(/img/paper-bg.jpg);
   background-repeat: repeat-y;
   background-size: cover;
   color: #fefae0;
