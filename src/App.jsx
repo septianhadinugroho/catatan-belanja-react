@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const groceryItems = [
   {
     id: 1,
@@ -35,12 +37,31 @@ function Header() {
 }
 
 function Form() {
+  const [name, setName] = useState('');
+  const [quantity, setQuantity] = useState('');
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    
+    if (!name || !quantity) {
+      alert(!name ? "Nama barang harus diisi!" : "Jumlah barang harus diisi!");
+      return;
+    }
+
+    const newItem = { name, quantity, checked: false, id: Date.now() };
+
+    console.log(newItem);
+
+    setName('');
+    setQuantity('');
+  }
+
   return (
-    <form className="add-form">
+    <form className="add-form" onSubmit={handleSubmit}>
     <h3>Hari ini belanja apa kita?</h3>
     <div>
-      <input type="number" min={1} defaultValue={1} placeholder="Jumlah" />
-      <input type="text" placeholder="nama barang..." />
+      <input type="number"  placeholder="Jumlah" value={quantity} onChange={(e) => setQuantity(e.target.value === "" ? "" : Number(e.target.value))} />
+      <input type="text" placeholder="nama barang..." value={name} onChange={(e) => setName(e.target.value)} />
     </div>
     <button>Tambah</button>
   </form>
