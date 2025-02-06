@@ -22,11 +22,13 @@ const groceryItems = [
 ];
 
 export default function App() {
+  const [items, setItems] = useState(groceryItems);
+
   return (
     <div className="app">
     <Header />
     <Form />
-    <GroceryList />
+    <GroceryList items={items} />
     <Footer />
   </div>
   );
@@ -68,12 +70,12 @@ function Form() {
   )
 }
 
-function GroceryList() {
+function GroceryList({ items }) {
   return (
     <>
       <div className="list">
         <ul>
-          {groceryItems.map((item) => (
+          {items.map((item) => (
             <Item item={item} key={item.id} />
           ))}
         </ul>
