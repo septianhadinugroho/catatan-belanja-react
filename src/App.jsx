@@ -3,12 +3,18 @@ import { useState } from "react";
 const groceryItems = [
   {
     id: 1,
+    name: 'Tas Ransel',
+    quantity: 9,
+    checked: false,
+  },
+  {
+    id: 2,
     name: 'Kopi Bubuk',
     quantity: 2,
     checked: true,
   },
   {
-    id: 2,
+    id: 3,
     name: 'Gula Pasir',
     quantity: 5,
     checked: false,
@@ -30,11 +36,15 @@ export default function App() {
     setItems((items) => items.map((item) => item.id === id ? {...item, checked: !item.checked} : item));
   }
 
+  function handleClearItems() {
+    setItems([]);
+  }
+
   return (
     <div className="app">
     <Header />
     <Form onAddItem={ handleAddItem } />
-    <GroceryList items={ items } onDeleteItem={ handleDeleteItem } onToggleItem={ handleToggleItem } />
+    <GroceryList items={ items } onDeleteItem={ handleDeleteItem } onToggleItem={ handleToggleItem } onClearItems={ handleClearItems } />
     <Footer />
   </div>
   );
@@ -77,23 +87,39 @@ function Form({ onAddItem }) {
   )
 }
 
-function GroceryList({ items, onDeleteItem, onToggleItem }) {
+function GroceryList({ items, onDeleteItem, onToggleItem, onClearItems }) {
+  const [sortBy, setSortBy] = useState('input')
+
+  let sortedItems;
+
+  switch(sortBy) {
+    case 'name':
+      sortedItems = items.slice().sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case 'checked':
+      sortedItems = items.slice().sort((b, a) => a.checked - b.checked);
+      break;
+    default:
+      sortedItems = items;
+      break;
+  }
+
   return (
     <>
       <div className="list">
         <ul>
-          {items.map((item) => (
+          {sortedItems.map((item) => (
             <Item item={ item } key={ item.id } onDeleteItem={ onDeleteItem } onToggleItem={ onToggleItem } />
           ))}
         </ul>
       </div>
       <div className="actions">
-        <select>
+        <select value={ sortBy } onChange={(e) => setSortBy(e.target.value)}>
           <option value="input">Urutkan berdasarkan urutan input</option>
           <option value="name">Urutkan berdasarkan nama barang</option>
           <option value="checked">Urutkan berdasarkan ceklis</option>
         </select>
-        <button>Bersihkan Daftar</button>
+        <button onClick={ onClearItems }>Bersihkan Daftar</button>
       </div>
     </>
   )
